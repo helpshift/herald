@@ -1,0 +1,76 @@
+---
+name: api77
+bind: 0.0.0.0
+port: 5555
+# plugins_dir: /etc/herald/plugins
+plugins_dir: ./herald/plugins
+# Load the plugins using dynamic import from the above dir
+# Plugin is identified by using `herald_plugin_name`
+#   1. That should be instantiated by passing the whole plugin hash as arg
+#   2. Has a method called `run` which gets scheduled by the main program for
+#      the respective interval
+#   3. Has a method called `respond` which returns the response that should be
+#      sent to the haproxy
+#   4. Has a method called `stop` which will do plugin clean up
+#   4. Implements caching may be using a common interface available to all plugins
+#
+# Caching abstraction may be written a common module/class that also takes care of staleness
+# part of things.
+# Main program calls respond on instance of any plugin that maps to agent-send if received from
+# haproxy
+# agent-send would be sending string in the following form:
+# "<client_name>/<plugin_name>\n"
+plugins:
+  # name is used for caching keys in the agent, all in memory only
+  # and also used with the agent level name to form a string that can
+  # be matched against the string (agent-send) received from haproxy
+  # for example, "api77/unique_name" in this case
+  - name: dirigent
+    herald_plugin_name: herald_file
+    file_path: /tmp/state
+    # herald_plugin_name: herald_http
+    # url: http://localhost:9000/health-check
+    # indicate to the plugin that the results parsed using
+    # json
+    is_json: yes
+    # Controls the timeout for plugin graceful shutdown
+    stop_timeout: 10
+    # How often to poll (seconds), 0 means poll request inline
+    # and caching is disabled when interval is 0
+    # interval: 10
+    interval: 5
+    # Mark things stale if no updates since (seconds)
+    staleness_interval: 10
+    # Other options for response are up, down, maint, drain and so on
+    # noop means don't respond at all
+    # staleness_response: down
+    staleness_response: noop
+    # pattern rules
+    # keys from the response can be used in the patterns_metric or
+    # thresholds_metric. expression needs to be evaualted in safe context
+    # for security. The response is available in a special dict called `r`.
+    #
+    # could also have predefined vars available for in the expression
+    patterns_metric: "r['health']"
+    # first match wins
+    patterns:
+      - ready: '.*healthy.*'
+      - down: '.*unhealthy.*'
+      - drain: '.*maxed.*'
+    thresholds_metric: "r['outgoing-messsage-per-second']"
+    thresholds:
+      # respond with "up" if less than 7000
+      # - up: "<7000"
+      # respond with "drain" if this threshold is met, i.e. greater than 7000
+      - drain: ">7000"
+      # respond with "down" if this threshold is met, that is equal to 0
+      - down: 0
+      # or any state
+      # Calculate weight percentage based on this number and respond with that
+      - pct: 7000
+      # respond with min_threshold_response % when percentage is less than or
+      # equal to 0% - defaults to 0. This is to avoid a scenario where a cluster
+      # goes above capacity and all nodes receive 0% (which means DRAIN)
+        min_threshold_response: 1
+    # If none of the rules match, use default_response
+    default_response: noop
