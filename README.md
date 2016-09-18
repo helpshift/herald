@@ -20,7 +20,7 @@ We recommend using pip to install in a virtualenv :
 
 ```
 $ virtualenv herald
-$ pip install herald
+$ pip install haproxy-herald
 ```
 
 ## Configuration

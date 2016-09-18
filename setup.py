@@ -3,7 +3,7 @@
 
 from setuptools import setup
 
-setup(name='herald',
+setup(name='haproxy-herald',
       version='0.1.0',
       description='Haproxy load feedback and check agent',
       url='https://github.com/helpshift/herald',
