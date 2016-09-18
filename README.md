@@ -10,7 +10,7 @@ There are many use cases for using the agent, load feedback being an obvious one
 
 ## Goals
 
-* Flexible and simple configuration file
+* Flexible and easy to configure
 * Extensible using plugins
 * High performance
 
@@ -68,6 +68,9 @@ plugins:
         min_threshold_response: 1
     default_response: noop
 ```
+
+Herald reads from `/etc/herald/config.yml` by default. The plugins are bundled in herald.plugins, which can be symlinked in `/etc/herald/plugins`.
+
 Check the *example_config.yml* file for detailed configuration options.
 
 With this configuration, herald will poll the health check url every **30s**. Note that the response is also cached to avoid hitting the health check url too often.
@@ -79,6 +82,7 @@ The *herald_http* and *herald_file* plugins are provided in *herald/plugins* dir
 The following features are provided by the plugin framework :
 
 * Check result cacheing
-* Json parsing and processing parsed data using python dict expressions
+* Json parsing and processing parsed data using any python dict expression
 * Arthmetic expressions on the result
+* Calculate weight percentage on the result
 * Regex pattern matching on the result

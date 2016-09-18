@@ -73,4 +73,5 @@ plugins:
       # goes above capacity and all nodes receive 0% (which means DRAIN)
         min_threshold_response: 1
     # If none of the rules match, use default_response
+    # 'noop' is a keyword to not reply with any response
     default_response: noop

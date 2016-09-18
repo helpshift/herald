@@ -5,8 +5,9 @@ from setuptools import setup
 
 setup(name='herald',
       version='0.1.0',
-      description='Haproxy load feedback and agent check service',
+      description='Haproxy load feedback and check agent',
       url='https://github.com/helpshift/herald',
+      download_url='https://github.com/helpshift/herald/tarball/0.1.0',
       author='Raghu Udiyar',
       author_email='raghusiddarth@gmail.com',
       license='MIT',
@@ -17,6 +18,7 @@ setup(name='herald',
       entry_points={
           'console_scripts': [
               'herald = herald.herald:main'
-              ]
-          }
+          ]
+      },
+      keywords=['Haproxy']
       )
