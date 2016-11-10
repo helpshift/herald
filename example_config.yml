@@ -25,7 +25,7 @@ plugins:
   # and also used with the agent level name to form a string that can
   # be matched against the string (agent-send) received from haproxy
   # for example, "api77/unique_name" in this case
-  - name: dirigent
+  - name: api_service
     herald_plugin_name: herald_file
     file_path: /tmp/state
     # herald_plugin_name: herald_http

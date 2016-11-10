@@ -86,3 +86,9 @@ The following features are provided by the plugin framework :
 * Arthmetic expressions on the result
 * Calculate weight percentage on the result
 * Regex pattern matching on the result
+
+## Future
+
+* Unit and integration tests
+* Improved logging
+* Configuration reload on SIGHUP
