@@ -145,11 +145,11 @@ class HeraldPlugin(HeraldBasePlugin):
             'both threshold and pattern rules are not defined!'
 
         if threshold_rules:
-            threshold_metric = kwargs['thresholds_metric']
+            threshold_metric = kwargs.get('thresholds_metric', 'r')
             self.ht = HeraldThresholds(threshold_rules, threshold_metric)
 
         if pattern_rules:
-            pattern_metric = kwargs['patterns_metric']
+            pattern_metric = kwargs.get('patterns_metric', 'r')
             self.hp = HeraldPatterns(pattern_rules, pattern_metric)
 
         self.default_response = kwargs.get('default_response', '')
