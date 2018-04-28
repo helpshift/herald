@@ -132,7 +132,7 @@ class HeraldThresholds(HeraldBaseRules):
                     - pct: 7000
                 ]
 
-        The supported operators for the thresholds are !, <, > and = (default).
+        The supported operators for the thresholds are !, <, > and == (default).
 
         """
         super(HeraldThresholds, self).__init__(metric)
@@ -184,8 +184,11 @@ class HeraldThresholds(HeraldBaseRules):
         `value` must be of type integer.
 
         """
-        assert isinstance(value, (int, float)), \
-            'value must be of type int or float! value is {}'.format(value)
+        try:
+            value = float(value)
+        except ValueError:
+            print 'value must be of type int or float! value is {}'.format(value)
+            raise
 
         for rule in self._parsed_rules:
             action, op, threshold = rule[0], rule[1], rule[2]
