@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import logging
 
 
 class HeraldBaseRules(object):
@@ -20,6 +21,7 @@ class HeraldBaseRules(object):
 
         """
         self.metric = metric
+        self.logger = logging.getLogger(__name__)
 
     def evaluate_metric(self, context):
         """
@@ -151,7 +153,7 @@ class HeraldThresholds(HeraldBaseRules):
                 if 'pct' in rule:
                     action = 'pct'
                     threshold = rule['pct']
-                    min_resp = rule.get('min_threshold_response', 0)
+                    min_resp = rule.get('min_threshold_response', 1)
                 else:
                     action, threshold = rule.items()[0]
 
@@ -198,7 +200,15 @@ class HeraldThresholds(HeraldBaseRules):
                 pct = int(100 - ((value / float(threshold)) * 100))
                 if pct <= 0:
                     min_resp = rule[3]
+                    self.logger.warn('Pct value {} less than 0, responding with min '
+                                     'threshold response {}'.format(pct,
+                                                                    min_resp))
                     return str(min_resp) + '%'
+                # noop if pct is greater than 100
+                elif pct > 100:
+                    self.logger.warn('Pct value {} greather thatn 100 responding with '
+                                     'empty string (noop)'.format(pct))
+                    return ''
                 else:
                     return str(pct) + '%'
             else:
