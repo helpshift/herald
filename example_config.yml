@@ -47,7 +47,7 @@ plugins:
     staleness_response: noop
     # pattern rules
     # keys from the response can be used in the patterns_metric or
-    # thresholds_metric. expression needs to be evaualted in safe context
+    # thresholds_metric. expression needs to be evaluated in safe context
     # for security. The response is available in a special dict called `r`.
     #
     # could also have predefined vars available for in the expression
@@ -57,7 +57,7 @@ plugins:
       - ready: '.*healthy.*'
       - down: '.*unhealthy.*'
       - drain: '.*maxed.*'
-    thresholds_metric: "r['outgoing-messsage-per-second']"
+    thresholds_metric: "r['outgoing-messages-per-second']"
     thresholds:
       # respond with "up" if less than 7000
       # - up: "<7000"
@@ -74,4 +74,18 @@ plugins:
         min_threshold_response: 1
     # If none of the rules match, use default_response
     # 'noop' is a keyword to not reply with any response
+    default_response: noop
+
+  - name: myservice_plugin
+    herald_plugin_name: herald_http
+    url: 'http://localhost:8081/health_check'
+    is_json: yes
+    stop_timeout: 60
+    interval: 30
+    staleness_interval: 120
+    staleness_response: noop
+    thresholds_metric: "r['msg-pre-second']"
+    thresholds:
+      - pct: 7000
+        min_threshold_response: 1
     default_response: noop

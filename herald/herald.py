@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+#monkey.patch_all()
 
 import os
 import sys
@@ -12,6 +12,7 @@ import argparse
 import logging
 from functools import partial
 from gevent.server import StreamServer
+from .baseplugin import HeraldBasePlugin
 from gevent import signal_handler as gsignal
 from importlib.util import spec_from_file_location, module_from_spec
 
@@ -42,7 +43,7 @@ def load_all_plugins(plugins_dir):
     """
     logger = logging.getLogger('plugin_loader')
 
-    plugins = {}
+    # plugins = {}
     for fn in os.listdir(plugins_dir):
         if fn.endswith('.py'):
             name = os.path.splitext(fn)[0]
@@ -50,13 +51,17 @@ def load_all_plugins(plugins_dir):
                 spec = spec_from_file_location(name, os.path.join(plugins_dir, fn))
                 plugin_module = module_from_spec(spec)
                 spec.loader.exec_module(plugin_module)
-                plugins[name] = plugin_module
+                # plugins[name] = plugin_module
             except Exception as e:
                 logger.critical('Error loading plugin {}: {} '.format(name, e))
                 sys.exit(1)
 
-    return plugins
+    all_plugins = dict()
+    for p in HeraldBasePlugin.plugins:
+        all_plugins[p.herald_plugin_name] = p
 
+    logger.info(all_plugins)
+    return all_plugins
 
 def load_plugin(plugins, config):
     """
@@ -189,7 +194,3 @@ def main():
     server = start_server(args, config, plugin)
     setup_handlers(server, plugin)
     server.serve_forever()
-
-
-if __name__ == "__main__":
-    main()

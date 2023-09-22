@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from gevent import monkey
-monkey.patch_all()
+#from gevent import monkey
+#monkey.patch_all()
 
 import time
 import logging
@@ -27,7 +27,7 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             assert hasattr(cls, 'herald_plugin_name'), \
-                'Plugin class atrribute herald_plugin_name must be defined'
+                'Plugin class attribute herald_plugin_name must be defined'
 
             all_plugin_names = [p.herald_plugin_name for p in cls.plugins]
             assert cls.herald_plugin_name not in all_plugin_names, \
@@ -37,7 +37,7 @@ class PluginMount(type):
             cls.plugins.append(cls)
 
 
-class HeraldBasePlugin(object):
+class HeraldBasePlugin(object, metaclass=PluginMount):
     """
     All plugins should inherit from this class.
 
@@ -45,8 +45,6 @@ class HeraldBasePlugin(object):
     all plugin classes are available as a list in the `plugins` attribute.
 
     """
-    __metaclass__ = PluginMount
-
     def __init__(self, name, *args, **kwargs):
         self.name = name
         self.state = ''
@@ -209,12 +207,12 @@ class HeraldPlugin(HeraldBasePlugin):
 
         """
         # NOTE: we could have use dict directly here but special chars
-        # whould have to be converted, like hyphens into underscores for
+        # would have to be converted, like hyphens into underscores for
         # the vars to work in python. This search and replace is expensive
         # when done at runtime.
         #
         # So, store the plugin result in key `r`
-        # The only con here would be readibilty of the metric.
+        # The only con here would be readability of the metric.
         context = {'r': result}
         state = []
         # process pattern rules
