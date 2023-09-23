@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#from gevent import monkey
-#monkey.patch_all()
-
-import os
 import sys
+import os
 import signal
 import yaml
 import argparse

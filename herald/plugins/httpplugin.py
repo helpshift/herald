@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-#from gevent import monkey
-#monkey.patch_all()
-
 import requests
 import json
 from herald.baseplugin import HeraldPlugin

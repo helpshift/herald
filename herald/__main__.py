@@ -7,6 +7,11 @@
     © CalCool Studios SAS 2021-2023
 """
 # Import system libraries
+import sys
+
+if sys.gettrace() is None:
+    from gevent import monkey
+    monkey.patch_all()
 
 # Import public libraries
 

@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#from gevent import monkey
-#monkey.patch_all()
-
 import time
 import logging
 import gevent
