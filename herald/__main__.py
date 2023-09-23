@@ -6,8 +6,6 @@
     By Jean-Marc Le Peuvédic
     © CalCool Studios SAS 2021-2023
 """
-# TODO List
-
 # Import system libraries
 
 # Import public libraries
