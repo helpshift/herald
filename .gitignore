@@ -79,6 +79,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
+.venv/
 venv/
 ENV/
 
@@ -91,3 +92,6 @@ ENV/
 # Vim
 *.swp
 
+# JetBrains IDE
+.idea/
+/src/herald/_version.py
