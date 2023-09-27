@@ -94,4 +94,5 @@ ENV/
 
 # JetBrains IDE
 .idea/
+.idea/runConfigurations/
 /src/herald/_version.py
