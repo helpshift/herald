@@ -35,9 +35,7 @@ class HeraldBaseRules(object):
         try:
             result = eval(self.metric, {}, context)
         except Exception as e:
-            raise Exception('Erorr in evaluating metric: {} against'
-                            ' context: {}, exception is: {}'.format(
-                                self.metric, context, e))
+            raise Exception(f'Error in evaluating metric: {self.metric} against context: {context}, exception is: {e}')
         return result
 
     def evaluate(self, context):
@@ -93,7 +91,7 @@ class HeraldPatterns(HeraldBaseRules):
 
         """
         for rule in self.rules:
-            action, pattern = rule.items()[0]
+            action, pattern = next(iter(rule.items()))
             if re.match(pattern, str(value)):
                 return action
         else:
@@ -155,7 +153,7 @@ class HeraldThresholds(HeraldBaseRules):
                     threshold = rule['pct']
                     min_resp = rule.get('min_threshold_response', 1)
                 else:
-                    action, threshold = rule.items()[0]
+                    action, threshold = next(iter(rule.items()))
 
                 m = re.match(self.op_regex, str(threshold))
                 op, th = m.groups()
@@ -189,7 +187,7 @@ class HeraldThresholds(HeraldBaseRules):
         try:
             value = float(value)
         except ValueError:
-            print 'value must be of type int or float! value is {}'.format(value)
+            print(f'value must be of type int or float! value is {value}')
             raise
 
         for rule in self._parsed_rules:
